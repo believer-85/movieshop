@@ -8,6 +8,8 @@ const Mpesapayment = ()=> {
     //Hook to Hold Phone Number
     const [phone, setPhone] = useState("")
     const [message, setMessage] = useState("")
+    // image url
+    const img_url = "https://macdonaldoryx.alwaysdata.net/static/images/"
     
     //Create a submit Function
     const submit = async(e) =>{
@@ -30,7 +32,7 @@ const Mpesapayment = ()=> {
     <div className='row justify-content-center mt-2' id='mpesa'>
             <h1>LIPA NA MPESA</h1>
             <div className='col-md-6 card shadow card-margin mb-4'> 
-            
+            <img src={img_url + product.product_photo} alt={product.product_photo} />
             <p>Product NAME: {product.product_name}</p>             
             <p>Product Cost: {product.product_cost}</p>
       
