@@ -39,6 +39,7 @@ const Mpesapayment = ()=> {
     return (
     <div className='row justify-content-center mt-2' id='mpesa'>
             <h1>LIPA NA MPESA</h1>
+            {error}
             <div className='col-md-6 card shadow card-margin mb-4'> 
             <img src={img_url + product.product_photo} alt={product.product_photo} />
             <p>Product NAME: {product.product_name}</p>  
