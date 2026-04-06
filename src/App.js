@@ -11,21 +11,23 @@ import Mpesapayment from './components/Mpesapayment';
 function App() {
   return (
     <Router>
-    <div className="App">  
+    <div className="App">
       <div className='App-header'>
         <h1>MOVIESHOP</h1>
       </div>
       {/* navigation bar display */}
       <div className='col-md-12'>
-        <nav className='navbar navbar-expand-md navbar-light bg-light m-2' id="main-nav">        
+        <nav className='navbar navbar-expand-md navbar-light bg-light m-2' id="main-nav">
           
-            <b className='text-dark'>Movie Collections</b>          
+          
+            <b>Movie Collections</b>
+          
 
           {/* the collapse button */}
-          <button className='navbar-toggler' data-bs-target="#navbarcollapse" data-bs-toggle="collapse" type="button">
+          <button className='navbar-toggler' data-bs-target="#navbarcollapse" data-bs-toggle="collapse">
             <span className='navbar-toggler-icon'></span>
           </button>
-          <div className='collapse navbar-collapse' id="navbarcollapse">
+          <div className='collapse navbar-collapse'>
             <div className='navbar-nav'>
               <Link to='/' className='btn btn-outline-danger ms-2'>Homepage</Link>
               <Link to='/signup' className='btn btn-outline-danger ms-2'>Signup</Link>
