@@ -27,7 +27,7 @@ function App() {
           <button className='navbar-toggler' data-bs-target="#navbarcollapse" data-bs-toggle="collapse">
             <span className='navbar-toggler-icon'></span>
           </button>
-          <div className='collapse navbar-collapse'>
+          <div className='collapse navbar-collapse' id="navbarcollapse">
             <div className='navbar-nav'>
               <Link to='/' className='btn btn-outline-danger ms-2'>Homepage</Link>
               <Link to='/signup' className='btn btn-outline-danger ms-2'>Signup</Link>
