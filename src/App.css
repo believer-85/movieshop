@@ -1,0 +1,231 @@
+.App {
+  color: #ffffff;
+  object-fit: cover;
+  min-height: 100vh;
+  background-color: #0f0f0f;
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+#footer{
+  background-color: rgba(135, 83, 148, 0.336);
+}
+.carousel-item {
+  margin-right: 0;
+  flex: 0 0 100%;
+  display: block;
+  transition: transform 0.6s ease-in-out;
+  opacity: 0.4;
+  transform: scale(0.8);
+  height: 500px;
+}
+.carousel-item.active{
+  opacity: 1;
+  transform: scale(1);
+  display: block;
+}
+.carousel-item img{
+  height: 60vh;
+  object-fit: top;
+  object-position: center;
+}
+.body {
+  background-color: #0f0f0f;
+  color: #ffffff;
+  margin: 0;
+}
+.movie-card {
+  background-color: #f8f9fa;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0.3s;
+  cursor: pointer;
+}
+.movie-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(229, 9, 20, 0.4);
+  z-index: 10;
+  border-color: #e50914;
+}
+.btn-dark{
+  background-color: #e50914 !important;
+  border: none !important;
+  color: white !important;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.btn-dark:hover {
+  background-color: #b20710 !important;
+}
+#searchterm{
+  border-radius: 25px;
+  padding: 12px 20px;
+  background-color: white;
+  color: #0f0f0f;
+  border: 1px solid #444;
+}
+.search-container {
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  background-color: #1c1c1c;
+  /* dark movie feel */
+  border-radius: 30px;
+  padding: 5px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  position: relative;
+}
+.search-input {
+  color: #aaa;
+  padding: 40px;
+}
+.search-btn {
+  background-color: #e50914;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.search-btn:hover {
+  background-color: #ff1f1f;
+}
+#card-color {
+  padding: 10px;
+  
+  color: white;
+  border-radius: 10px;
+  
+}
+.product_img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.movie-card .card-body p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.movie-card .card-body h4 {
+  min-height: 2.5rem;
+  margin-bottom: 5px;
+}
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.image-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(transparent, rgba(0,0,0,0.2));
+  pointer-events: none;
+}
+.text-warning {
+  display: inline-block;
+  background: #fff3cd;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #856404 !important;
+  margin-bottom: 10px;
+}
+.card-body h4 {
+  text-transform: capitalize;
+  font-weight: 700;
+  color: #222;
+}
+.btn-dark {
+  background-color: #e50914 !important; /*Netflix red */
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.btn-dark:active {
+  transform: scale(0.95); /*button squishes when clicked*/
+}
+#main-nav {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #333; /*adds a subtle separator line*/
+}
+/* makes the brand standout */
+.navbar-brand {
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+}
+
+/* hover effect for the navigation button */
+.navbar .btn {
+  transition: transform 0.2s ease;
+}
+.navbar .btn:hover {
+  transform: translateY(-2px); /*slight lift */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+#signup .form-control {
+  background-color: #333;
+  /* darker inputs */
+  border: 1px solid #444;
+  color: white;
+  padding: 12px;
+  margin-bottom: 5px;
+}
+
+#signup .form-control:focus {
+  background-color: #444;
+  border-color: #e50914; /*this red focus brings the netflix theme*/
+  box-shadow: none;
+  color: white;
+}
+#signup .form-control::placeholder {
+  color: #bbb;
+}
