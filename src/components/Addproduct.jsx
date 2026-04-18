@@ -42,14 +42,14 @@ const Addproducts = () => {
   return (
     <div className='row justify-content-center mt-4' id='editing'>
       <nav>
-        <Link to="/" className='btn btn-dark'>Get all Movies</Link>
+        <Link to="/" className='btn btn-dark fw-bold'>Get all Movies</Link>
       </nav>
       {error}
       {success}
       {loading}
-      <div className='col-md-6 card shadow p-4 m-2' id='addproducts'>
+      <div className='col-md-5 card shadow-lg p-5 mt-5 mb-5 text-white bg-dark border-secondary' id='addproducts'>
         <form action="" onSubmit={handleSubmit}>
-          <h3>Upload movies</h3>
+          <h3 className='text-center mb-4 fw-bold'>Upload movies</h3>
           <input 
             type="text"
             placeholder='Movie name'
@@ -91,12 +91,12 @@ const Addproducts = () => {
           <input 
             type="submit"
             value="submit product" 
-            className='btn btn-outline-danger w-100'
+            className='btn btn-danger w-100 fw-bold py-2 mt-3'
           />
           <br />
 
 
-          <Link to='/signup'>Dont have an account?? Signup</Link>
+          <Link to='/signup' className='text-secondary text-decoration-none'>Dont have an account?? Signup</Link>
 
         </form>
       </div>

@@ -46,12 +46,12 @@ const Signin = () => {
 
 
   return (
-    <div className='row justify-content-center mt-4'>
-      <div className='col-md-6 card shadow p-4' id='signin'>
-        <h2>Signin</h2>
+    <div className='row justify-content-center mt-5 mb-5'>
+      <div className='col-md-5 card shadow-lg p-5 text-white bg-dark border-secondary' id='signin'>
+        <h2 className='text-center mb-4 fw-bold'>Signin to movieshop</h2>
         <form action="" onSubmit={submit}>
-          {loading}
-          {error}
+          {loading && <div className='alert alert-info py-2'>{loading}</div>}
+          {error && <div className='alert alert-danger py-2'>{error}</div>}
             <input 
               type="email" 
               className='form-control' 
@@ -71,10 +71,10 @@ const Signin = () => {
             />
             <br />
 
-            <button type="submit" className='form-control btn btn-outline-primary w-100'>Login</button>
+            <button type="submit" className='btn btn-danger w-100 fw-bold py-2 mt-3'>Login</button>
         </form>
 
-        <Link to="/signup">Don't have an account?? Signin</Link>
+        <Link to="/signup" className='text-secondary text-decoration-none'>Don't have an account?? Signin</Link>
       </div>
       <Foooter/>
     </div>

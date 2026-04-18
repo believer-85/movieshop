@@ -229,3 +229,37 @@
 #signup .form-control::placeholder {
   color: #bbb;
 }
+#signin .form-control {
+  background-color: #333;
+  /* darker inputs */
+  border: 1px solid #444;
+  color: white;
+  padding: 12px;
+  margin-bottom: 5px;
+}
+#signin .form-control:focus {
+  background-color: #444;
+  border-color: #e50914; /*this red focus brings the netflix theme*/
+  box-shadow: none;
+  color: white;
+}
+#signin .form-control::placeholder {
+  color: #bbb;
+}
+#addproducts .form-control {
+  background-color: #333;
+  /* darker inputs */
+  border: 1px solid #444;
+  color: white;
+  padding: 12px;
+  margin-bottom: 5px;
+}
+#addproducts .form-control:focus {
+  background-color: #444;
+  border-color: #e50914; /*this red focus brings the netflix theme*/
+  box-shadow: none;
+  color: white;
+}
+#addproducts .form-control::placeholder {
+  color: #bbb;
+}
