@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [user, setUser] = useState(null);
-    const navigate = useNavigate();
     
     const [cartCount, setCartCount] = useState(0);
   
@@ -50,7 +49,7 @@ const Navbar = () => {
               {/* conditional logic for logout */}
               {user ? (
                 <>
-                  <span className='nav-link text success fw-bold'>Welcome, {user.username}</span>
+                  <span className='nav-link text success fw-bold'>Welcome, {user.username}👋</span>
                   <Link to='/addproduct'className='btn btn-outline-warning ms-2 nav-link mx-2 btn-sm px-3'>AddProduct</Link>
                   {/* the cart link */}
                   <Link to="/cart" className="btn btn-outline-light position-relative">

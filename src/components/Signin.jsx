@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Foooter from './Foooter';
 
 const Signin = () => {
@@ -12,8 +12,7 @@ const Signin = () => {
   const [loading,setLoading] = useState("")
   const [error,setError] = useState("")
 
-  // navigation through components
-  const navigate = useNavigate()
+ 
 
 
   // function to submit data to API

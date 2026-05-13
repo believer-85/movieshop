@@ -1,234 +1,448 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Foooter from './Foooter';
-import slide1 from '../images/originals.jpg'
-import slide2 from '../images/prison break.jpeg'
-import slide3 from '../images/legacy.jpg'
-import slide4 from '../images/vampire diaries.webp'
-import slide5 from '../images/lucifer.jpg'
 
-
+import slide1 from '../images/originals.jpg';
+import slide2 from '../images/prison break.jpeg';
+import slide3 from '../images/legacy.jpg';
+import slide4 from '../images/vampire diaries.webp';
+import slide5 from '../images/lucifer.jpg';
 
 const Homepage = () => {
 
-  // Initialize Hooks
-  const [products, setProducts] = useState([]);  
-  const [loading, setLoading] = useState(""); 
+  // =========================
+  // LOCAL PRODUCTS
+  // =========================
+  const [products, setProducts] = useState([]);
+
+  // =========================
+  // TMDB MOVIES
+  // =========================
+  const [tmdbMovies, setTmdbMovies] = useState([]);
+
+  // =========================
+  // STATES
+  // =========================
+  const [loading, setLoading] = useState("");
   const [error, setError] = useState("");
-  const handleAddToCart = (product) => {
-  // 1. Get whatever is already in the cart (or an empty list if it's the first item)
-  const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  // 2. Check if the movie is already there so we don't have duplicates
-  const itemIndex = existingCart.findIndex(item => item.id === product.id);
-
-  if (itemIndex > -1) {
-    existingCart[itemIndex].quantity += 1;
-  } else {
-    // 3. If it's new, add the movie details
-    existingCart.push({ 
-      id: product.id, 
-      title: product.product_name, 
-      price: product.product_cost, 
-      image: img_url + product.product_photo,
-      quantity: 1 
-    });
-  }
-
-  // 4. Save the updated list back to the browser
-  localStorage.setItem('cart', JSON.stringify(existingCart));
-  
-  alert(`${product.product_name} has been added to your cart!`);
-};
-
-  // adding the search state
+  // =========================
+  // SEARCH
+  // =========================
   const [searchTerm, setSearchTerm] = useState("");
 
-  // adding filtering logic
-  const filteredProducts = products.filter((product) => product.product_name.toLowerCase().includes(searchTerm.toLowerCase()));
-
-
   const navigate = useNavigate();
-    // Specify image location URL
-    const img_url = "https://macdonaldoryx.alwaysdata.net/static/images/";
 
+  // =========================
+  // IMAGE URLS
+  // =========================
+  const img_url = "https://macdonaldoryx.alwaysdata.net/static/images/";
 
-    // Voice Search Logic
+  const TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/w500";
+
+  // =========================
+  // TMDB CONFIG
+  // =========================
+  const TMDB_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMGFkZGRkN2QwMTYwNjZhYzNjMzI3MWRhYmQzYzVhYiIsIm5iZiI6MTc3Nzk4OTUyMC45MjcsInN1YiI6IjY5ZjlmNzkwNDcxYmM1MDAxZjY0NjhlNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.gRuOFSJslvoXiYTEsjcthjx_o6WCBgdMIF12viRDA6Y";
+
+  const TMDB_HEADERS = {
+    Authorization: `Bearer ${TMDB_TOKEN}`,
+    accept: "application/json"
+  };
+
+  // =========================
+  // CART LOGIC
+  // =========================
+  const handleAddToCart = (product) => {
+
+    const existingCart =
+      JSON.parse(localStorage.getItem('cart')) || [];
+
+    const itemIndex =
+      existingCart.findIndex(item => item.id === product.id);
+
+    if (itemIndex > -1) {
+      existingCart[itemIndex].quantity += 1;
+    } else {
+
+      existingCart.push({
+        id: product.product_id,
+        title: product.product_name,
+        price: product.product_cost,
+        image: img_url + product.product_photo,
+        quantity: 1
+      });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(existingCart));
+
+    alert(`${product.product_name} has been added to your cart!`);
+  };
+
+  // =========================
+  // FILTER PRODUCTS
+  // =========================
+  const filteredProducts = products.filter((product) =>
+    product.product_name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
+  // =========================
+  // FILTER TMDB MOVIES
+  // =========================
+  const filteredTMDBMovies = tmdbMovies.filter((movie) =>
+    movie.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
+  // =========================
+  // VOICE SEARCH
+  // =========================
   const handleVoiceSearch = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
+
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
     if (!SpeechRecognition) {
-      alert("Your browser does not support voice recognition. Please try Chrome or Edge.");
+      alert("Browser does not support voice search");
       return;
     }
 
     const recognition = new SpeechRecognition();
+
     recognition.lang = 'en-US';
-    setLoading("Listening... Speak now.");
+
+    setLoading("Listening...");
 
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setSearchTerm(transcript); // Puts the spoken words into the search bar
+
+      const transcript =
+        event.results[0][0].transcript;
+
+      setSearchTerm(transcript);
+
       setLoading("");
     };
 
     recognition.onerror = (event) => {
-      setError("Voice recognition error: " + event.error);
+
+      setError("Voice Error: " + event.error);
+
       setLoading("");
     };
 
     recognition.start();
   };
 
+  // =========================
+  // FETCH LOCAL PRODUCTS
+  // =========================
+  const fetchProducts = async () => {
 
-    const fetchProducts = async() => {
-        setLoading("Please wait, We are retrieving the products .."); // Set loading message when fetching starts
-        try {
-            const response = await axios.get("https://macdonaldoryx.alwaysdata.net/api/get_product_details")
-            setProducts(response.data);
-            setLoading("");
-        }
-        catch(error) {            
-            setError("There was an Error")    
-        }
+    try {
+
+      setLoading("Loading products...");
+
+      const response = await axios.get(
+        "https://macdonaldoryx.alwaysdata.net/api/get_product_details"
+      );
+
+      setProducts(response.data);
+
+      setLoading("");
+
+    } catch (error) {
+
+      console.log(error);
+
+      setError("Error fetching products");
     }
+  };
 
-     useEffect(() => {
-       fetchProducts();
-       }, []);
-       
+  // =========================
+  // FETCH TMDB MOVIES
+  // =========================
+ // =========================
+// FETCH TMDB MOVIES
+// =========================
+const fetchTMDBMovies = async () => {
+
+  try {
+
+    setLoading("Loading TMDB movies...");
+
+    const response = await axios.get(
+      "https://api.themoviedb.org/3/movie/popular",
+      {
+        headers: TMDB_HEADERS
+      }
+    );
+
+    setTmdbMovies(response.data.results);
+
+    setLoading("");
+
+  } catch (error) {
+
+    console.log(error);
+
+    setError("Error fetching TMDB movies");
+  }
+};
+
+// =========================
+// SEARCH TMDB MOVIES
+// =========================
+const searchTMDBMovies = async (query) => {
+
+  if (!query.trim()) {
+
+    fetchTMDBMovies();
+
+    return;
+  }
+
+  try {
+
+    setLoading("Searching movies...");
+
+    const response = await axios.get(
+      "https://api.themoviedb.org/3/search/movie",
+      {
+        headers: TMDB_HEADERS,
+
+        params: {
+          query: query
+        }
+      }
+    );
+
+    setTmdbMovies(response.data.results);
+
+    setLoading("");
+
+  } catch (error) {
+
+    console.log(error);
+
+    setError("Error searching movies");
+  }
+};
+  
+  
+  // =========================
+  // USE EFFECT
+  // =========================
+  useEffect(() => {
+
+    fetchProducts();
+
+    fetchTMDBMovies();
+
+  }, []);
 
   return (
+
     <div className='row' id="homepage-root">
 
-      <div className='row justify-content-center'>
+      {/* SEARCH BAR */}
+
+      <div className='row justify-content-center mt-3'>
+
         <div className='col-md-6 search-container d-flex align-items-center'>
-          <input 
-            type="text" 
-            className='form-control search-input' 
-            placeholder='Search for a movie...' 
+
+          <input
+            type="text"
+            className='form-control search-input'
+            placeholder='Search for a movie...'
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            id="searchterm"
-            style={{ flex: 1 }}
+            onChange={(e) => {
+
+              const value = e.target.value;
+
+              setSearchTerm(value);
+
+              searchTMDBMovies(value);
+            }}
           />
-          {/* Microphone Button */}
-          <button 
+
+          <button
             type="button"
-            className='btn border-0 bg-transparent' 
+            className='btn border-0 bg-transparent'
             onClick={handleVoiceSearch}
-            title="Search by voice"
-            style={{ fontSize: '1.5rem', marginRight: '10px' }}
+            style={{ fontSize: '1.5rem' }}
           >
             🎙️
           </button>
-          <button className='search-btn'>🔍</button>
+
+          <button className='search-btn'>
+            🔍
+          </button>
+
         </div>
       </div>
-      {/* setting the carousel */}
-       <section className="row  w-50 mx-auto">
-      <div className="col-md-10 mx-auto">
-        {/* carousel starts here */}
-        <div className="carousel slide peeking-carousel" id="mycarousel" data-bs-ride="carousel">
-          {/* image wrapper */}
-          <div className="carousel-inner overflow-visible">
-            <div className="carousel-item active">
-              <img src={slide1} alt="slide1" className="d-block w-100 carousel-img"/>
+
+      {/* CAROUSEL */}
+
+      <section className="row w-50 mx-auto mt-4">
+
+        <div className="col-md-10 mx-auto">
+
+          <div
+            className="carousel slide peeking-carousel"
+            id="mycarousel"
+            data-bs-ride="carousel"
+          >
+
+            <div className="carousel-inner overflow-visible">
+
+              <div className="carousel-item active">
+                <img src={slide1} alt="" className="d-block w-100 carousel-img" />
+              </div>
+
+              <div className="carousel-item">
+                <img src={slide2} alt="" className="d-block w-100 carousel-img" />
+              </div>
+
+              <div className="carousel-item">
+                <img src={slide3} alt="" className="d-block w-100 carousel-img" />
+              </div>
+
+              <div className="carousel-item">
+                <img src={slide4} alt="" className="d-block w-100 carousel-img" />
+              </div>
+
+              <div className="carousel-item">
+                <img src={slide5} alt="" className="d-block w-100 carousel-img" />
+              </div>
+
             </div>
 
-            <div className="carousel-item">
-              <img src={slide2} alt="slide2" className="d-block w-100 carousel-img"/>
-            </div>
-
-            <div className="carousel-item">
-              <img src={slide3} alt="slide3" className="d-block w-100 carousel-img"/>
-            </div>
-            <div className="carousel-item">
-              <img src={slide4} alt="slide4" className="d-block w-100 carousel-img"/>
-            </div>
-            <div className="carousel-item">
-              <img src={slide5} alt="slide5" className="d-block w-100 carousel-img"/>
-            </div>
           </div>
 
-          {/* controls */}
-          <div>
-            <a href="#mycarousel" className="carousel-control-prev" data-bs-slide="prev" style={{width: '5' }}>
-              <span className="carousel-control-prev-icon bg-danger"></span>
-            </a>
-
-            <a href="#mycarousel" className="carousel-control-next"data-bs-slide="next">
-              <span className="carousel-control-next-icon bg-danger"></span>
-            </a>
-          </div>
         </div>
-      </div>
-    </section>
-    
-    
 
+      </section>
 
+      {/* PRODUCTS */}
 
-      <h1 className='mt-5' id='movie-title'>Available movies</h1>
+      <h1 className='mt-5' id='movie-title'>
+        Available Movies
+      </h1>
+
       {loading}
       {error}
 
-      
+      {filteredProducts.map((product) => (
 
-      {/* product card design */}
-      {filteredProducts.length > 0 ? (
-        filteredProducts.map((product) => (
-      
+        <div className="col-md-3 mb-4" key={product.id}>
 
-      <div className="col-md-3 jusify-content-center mb-4" id='home'>
-        
-        
+          <div className='card movie-card shadow-lg'>
 
+            <img
+              src={img_url + product.product_photo}
+              alt=""
+              className='product_img'
+              style={{
+                height: '350px',
+                objectFit: 'cover'
+              }}
+            />
 
-        <div className='card movie-card shadow-1g image-wrapper' id="card-color">
-          <img 
-            src={img_url + product.product_photo} 
-            alt={product.product_photo} 
-            className='product_img'
-            style={{ height: '350px', objectFit:'cover' }}
-          />
-          <div className='card-body'>
-            <h4 className='mt-2'>{product.product_name}</h4>
-            <p className='text-muted'>{product.product_description}</p>
-            <b className='text-warning'>{product.product_cost} KES</b> <br />
-            {/* NEW: The Add to Cart Button */}
-            <button
-              className="btn btn-outline-danger bg-transparent text-dark mt-2 w-100"
-              onClick={() => handleAddToCart(product)}>
-              Add to Cart
-            </button>
-            
-            <button
-              className="btn btn-dark mt-2 w-100"
-              onClick={() => navigate('/makepayment', { state: { product } })}>
-              Purchase now
-            </button>
+            <div className='card-body'>
+
+              <h4>{product.product_name}</h4>
+
+              <p>{product.product_description}</p>
+
+              <b className='text-warning'>
+                {product.product_cost} KES
+              </b>
+
+              <button
+                className="btn btn-outline-danger mt-2 w-100"
+                onClick={() => handleAddToCart(product)}
+              >
+                Add to Cart
+              </button>
+
+              <button
+                className="btn btn-dark mt-2 w-100"
+                onClick={() =>
+                  navigate('/makepayment',
+                    { state: { product } })
+                }
+              >
+                Purchase now
+              </button>
+
+            </div>
+
           </div>
-        </div>
 
-      </div>
-      ))
-    ) : ( 
-      <p>No Movies Found</p>
-    )}
-      <div className='row'>
-        <div className='col-md-4'>
-          
         </div>
-      </div>
-      <Foooter/>
+      ))}
+
+      {/* ========================= */}
+      {/* TMDB SECTION */}
+      {/* ========================= */}
+
+      <h1 className='mt-5 text-center'>
+        Trending Movies From TMDB
+      </h1>
+
+      {filteredTMDBMovies.map((movie) => (
+
+        <div className="col-md-3 mb-4" key={movie.id}>
+
+          <div className="card shadow-lg h-100">
+
+            <img
+              src={`${TMDB_IMAGE_URL}${movie.poster_path}`}
+              alt={movie.title}
+              className="card-img-top"
+              style={{
+                height: '350px',
+                objectFit: 'cover'
+              }}
+            />
+
+            <div className="card-body">
+
+              <h5>{movie.title}</h5>
+
+              <p>
+                {movie.overview.slice(0, 100)}...
+              </p>
+
+              <p className="text-warning">
+                ⭐ {movie.vote_average}
+              </p>
+
+              <button
+                className="btn btn-danger w-100"
+                onClick={() =>
+                  navigate(`/movie/${movie.id}`)
+                }
+              >
+                Watch Details
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+      ))}
+
+      <Foooter />
+
     </div>
-  )
-}
+  );
+};
 
-export default Homepage
-
-
-
-
+export default Homepage;
